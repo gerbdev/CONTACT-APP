@@ -1,16 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
-
-// importando los modulos de firebase
-import appFirebase from "../src/credenciales";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./components/Home";
+import Login from "./components/Login";
+import Register from "./components/Register";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import appFirebase from "../src/credenciales";
+
 const auth = getAuth(appFirebase);
-
-// importando los componentes
-import Home from "../src/components/Home";
-import Login from "../src/components/Login";
-
-import "./App.css";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -23,7 +20,15 @@ function App() {
     }
   });
 
-  return <div>{user ? <Home userEmail={user.email} /> : <Login />}</div>;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={user ? <Home userEmail={user.email} /> : <Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
